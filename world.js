@@ -1,22 +1,28 @@
 "use strict";
 
 window.onload=function() {
-    const btn = document.querySelector('#controls button');
+    const con_btn = document.querySelector('#controls #lookup');
+    const city_btn = document.querySelector('#controls #lookup-cities');
     
-
-    btn.addEventListener('click',searchSubmit);
+    con_btn.context="countries";
+    city_btn.context="cities";
+    
+    con_btn.addEventListener('click',searchSubmit);
+    city_btn.addEventListener('click',searchSubmit);
+    
 
     function searchSubmit(e){
         e.preventDefault();
+        let context = e.currentTarget.context;
         let message = document.querySelector("#message");
-        message.textContent=""
         let input = document.querySelector("#controls input#country").value;
         let valid_string=/[^( ,\.\-\(\)\w)]+/g;
-        //let valid_string=/[^(\w)]+/g;
-
+       
+        message.textContent=""
         input=input.trim();
+
         if(!(valid_string.test(input))){
-            let url = `world.php?country=${input}`;
+            let url = `world.php?country=${input}&context=${context}`;
             fetch(url)
             .then(response=>{
                 if (response.ok){
@@ -32,7 +38,6 @@ window.onload=function() {
             .catch(error=>console.log("There was an error "+error));
         }else{
             message.textContent = "Please enter a valid name. Name should not contain any special characters.";
-            message.style.color="red";
         }
         //end if valid string
         
